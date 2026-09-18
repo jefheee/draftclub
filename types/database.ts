@@ -1,38 +1,64 @@
 export type Tier = 'S' | 'A' | 'B' | 'C' | 'D' | 'UNRATED';
-export type TournamentFormat = '5x5' | '11x11' | '7x7';
 export type TournamentStatus = 'REGISTRATION' | 'SCOUTING' | 'DRAFT' | 'ACTIVE' | 'FINISHED';
+export type ParticipantRole = 'admin' | 'captain' | 'player';
 
 export interface Tournament {
   id: string;
   name: string;
-  format: TournamentFormat;
+  format: string;
   status: TournamentStatus;
-  max_teams: number;
   created_at: string;
 }
 
-export interface Player {
+export interface PlayerProfile {
   id: string;
   user_id?: string;
   name: string;
-  declared_positions: string[];
+  positions_declared: string[];
   archetype: string;
   avatar_url?: string;
   created_at: string;
 }
 
-export interface PlayerStats {
+export interface TournamentParticipant {
   id: string;
+  tournament_id: string;
   player_id: string;
-  pace: number;
-  shooting: number;
-  passing: number;
-  dribbling: number;
-  defending: number;
-  physical: number;
+  user_id?: string;
+  role: ParticipantRole;
+  created_at: string;
+  player?: PlayerProfile;
+}
+
+export interface Player {
+  id: string;
+  name: string;
+  positions: string[];
+  is_captain: boolean;
+  created_at?: string;
+}
+
+export interface PlayerStats {
+  id?: string;
+  player_id: string;
+  name?: string;
+  positions?: string[];
+  is_captain?: boolean;
+  evaluation_count?: number;
+  avg_mechanic?: number;
+  avg_iq?: number;
+  avg_teamplay?: number;
+  overall_score?: number;
+  tier?: Tier;
+  pace?: number;
+  shooting?: number;
+  passing?: number;
+  dribbling?: number;
+  defending?: number;
+  physical?: number;
   build_image_url?: string;
   ocr_extracted_at?: string;
-  updated_at: string;
+  updated_at?: string;
 }
 
 export interface PositionVote {
@@ -59,6 +85,7 @@ export interface Team {
   tournament_id: string;
   name: string;
   captain_id?: string;
+  active_formation: string;
   logo_url?: string;
   created_at: string;
 }
@@ -73,15 +100,26 @@ export interface DraftPick {
   selected_at: string;
 }
 
+export interface SquadLineup {
+  id: string;
+  tournament_id: string;
+  team_id: string;
+  slot_id: string;
+  position_code: string;
+  player_id: string | null;
+  updated_at: string;
+}
+
 export interface TournamentPlayerStats {
   tournament_id: string;
   player_id: string;
   name: string;
   archetype: string;
-  declared_positions: string[];
+  positions_declared: string[];
   community_position: string;
   community_confidence: number;
   total_position_votes: number;
+  participant_role: ParticipantRole;
   is_captain: boolean;
   evaluation_count: number;
   avg_mechanic: number;
@@ -95,24 +133,18 @@ export interface TournamentPlayerStats {
   draft_pick_number?: number | null;
 }
 
-// ========================
-// SQUAD BUILDER TYPES
-// ========================
-
 export interface PitchPositionSlot {
   slotId: string;
   positionCode: string;
   displayName: string;
-  xPercent: number; // 0 to 100 on the pitch width
-  yPercent: number; // 0 to 100 on the pitch height (0 = GK at bottom, 100 = ATA at top)
+  xPercent: number; // 0 a 100 da largura do campo
+  yPercent: number; // 0 a 100 da altura (90 = GK, 15 = ATA)
   assignedPlayerId?: string | null;
 }
 
-export type FormationKey = '4-3-3' | '4-2-3-1' | '3-5-2' | '1-2-1' | '2-2';
-
 export interface FormationPreset {
-  key: FormationKey;
+  key: string;
   label: string;
-  format: '11x11' | '5x5';
+  category: '4-defenders' | '5-defenders' | '3-defenders';
   slots: PitchPositionSlot[];
 }
