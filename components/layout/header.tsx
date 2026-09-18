@@ -3,17 +3,30 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Trophy, Users, LayoutGrid, Home, Shield, Sparkles, Settings } from 'lucide-react';
+import { 
+  Trophy, 
+  Users, 
+  LayoutGrid, 
+  Home, 
+  Shield, 
+  Settings, 
+  UserCheck, 
+  LogIn, 
+  LogOut 
+} from 'lucide-react';
+import { useAuth } from '@/components/auth/auth-context';
 import { cn } from '@/lib/utils';
 
 export function Header() {
   const pathname = usePathname();
+  const { session, logout } = useAuth();
 
   const navItems = [
     { label: 'Home', href: '/', icon: Home },
     { label: 'Torneios', href: '/tournaments', icon: Trophy },
     { label: 'Jogadores', href: '/players', icon: Users },
     { label: 'Squad Builder', href: '/tournaments/11111111-1111-1111-1111-111111111111/teams/b1111111-1111-1111-1111-111111111111/builder', icon: LayoutGrid },
+    { label: 'Capitão', href: '/captain', icon: UserCheck },
     { label: 'Admin', href: '/admin', icon: Settings },
   ];
 
@@ -65,21 +78,39 @@ export function Header() {
           </nav>
         </div>
 
-        {/* Right Section Action */}
+        {/* Right Section Auth / Actions */}
         <div className="flex items-center gap-2.5">
-          <Link
-            href="/evaluate"
-            className="px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 text-zinc-200 hover:text-white text-xs font-medium transition-colors flex items-center gap-1.5"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-            <span className="hidden sm:inline">Avaliar Jogador</span>
-            <span className="sm:hidden">Avaliar</span>
-          </Link>
+          {session ? (
+            <div className="flex items-center gap-2">
+              <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-zinc-900 border border-zinc-800 text-xs">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                <span className="text-zinc-300 font-medium">{session.name}</span>
+                <span className="text-[10px] text-zinc-500 uppercase font-mono">
+                  [{session.role}]
+                </span>
+              </div>
+              <button
+                onClick={logout}
+                className="p-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-rose-300 transition-colors"
+                title="Desconectar"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          ) : (
+            <Link
+              href="/login"
+              className="px-3 py-1.5 rounded-lg bg-zinc-100 hover:bg-white text-zinc-950 text-xs font-semibold transition-colors flex items-center gap-1.5"
+            >
+              <LogIn className="w-3.5 h-3.5" />
+              <span>Entrar</span>
+            </Link>
+          )}
         </div>
       </div>
 
       {/* Mobile Bar */}
-      <div className="md:hidden flex items-center justify-around border-t border-zinc-900 py-1.5 bg-zinc-950 px-2">
+      <div className="md:hidden flex items-center justify-around border-t border-zinc-900 py-1.5 bg-zinc-950 px-2 overflow-x-auto">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive =
@@ -93,7 +124,7 @@ export function Header() {
               key={item.label}
               href={item.href}
               className={cn(
-                'flex flex-col items-center gap-0.5 text-[10px] transition-colors p-1',
+                'flex flex-col items-center gap-0.5 text-[10px] transition-colors p-1 whitespace-nowrap',
                 isActive ? 'text-zinc-100 font-semibold' : 'text-zinc-500 hover:text-zinc-300'
               )}
             >

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { PlayerProfile } from '@/types/database';
 import { Users, Search, Award, ArrowRight } from 'lucide-react';
-import { getPositionBadgeClass, cn } from '@/lib/utils';
+import { getPositionBadgeClass, getArchetypeBadgeClass, cn } from '@/lib/utils';
 import { BackButton } from '@/components/ui/back-button';
 
 export default function PlayersIndexPage() {
@@ -30,7 +30,8 @@ export default function PlayersIndexPage() {
     return players.filter(
       (p) =>
         p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.archetype.toLowerCase().includes(searchTerm.toLowerCase())
+        (p.archetype && p.archetype.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        p.archetypes?.some((a) => a.toLowerCase().includes(searchTerm.toLowerCase()))
     );
   }, [players, searchTerm]);
 
@@ -77,9 +78,16 @@ export default function PlayersIndexPage() {
                   <div className="w-8 h-8 rounded-lg bg-zinc-950 border border-zinc-800 flex items-center justify-center font-bold text-xs text-zinc-300">
                     {player.name.slice(0, 2).toUpperCase()}
                   </div>
-                  <span className="px-2 py-0.5 rounded bg-zinc-950 border border-zinc-800 text-zinc-400 text-[9px] font-semibold uppercase tracking-wider">
-                    {player.archetype}
-                  </span>
+                  <div className="flex flex-wrap gap-1">
+                    {(player.archetypes && player.archetypes.length > 0 ? player.archetypes : [player.archetype || 'Mágico']).map((arch) => (
+                      <span
+                        key={arch}
+                        className={cn('px-1.5 py-0.2 rounded text-[9px] font-semibold uppercase tracking-wider border', getArchetypeBadgeClass(arch))}
+                      >
+                        {arch}
+                      </span>
+                    ))}
+                  </div>
                 </div>
 
                 <h2 className="text-sm font-semibold text-zinc-200 group-hover:text-white transition-colors">

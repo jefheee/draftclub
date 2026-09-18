@@ -7,7 +7,7 @@ import { PlayerProfile, PlayerStats } from '@/types/database';
 import { BackButton } from '@/components/ui/back-button';
 import { PlayerOcrUpload } from '@/components/players/player-ocr-upload';
 import { CommunityPositionVote } from '@/components/players/community-position-vote';
-import { getEAStatColor, getPositionBadgeClass, cn } from '@/lib/utils';
+import { getEAStatColor, getPositionBadgeClass, getArchetypeBadgeClass, cn } from '@/lib/utils';
 import { Activity, Award, User } from 'lucide-react';
 
 export default function PlayerProfilePage() {
@@ -69,11 +69,16 @@ export default function PlayerProfilePage() {
               </div>
 
               <div>
-                <div className="flex items-center gap-2">
-                  <span className="px-2 py-0.5 rounded bg-zinc-950 border border-zinc-800 text-zinc-400 text-[10px] font-semibold uppercase tracking-wider flex items-center gap-1">
-                    <Award className="w-3 h-3 text-zinc-400" />
-                    {player.archetype}
-                  </span>
+                <div className="flex flex-wrap items-center gap-1.5">
+                  {(player.archetypes && player.archetypes.length > 0 ? player.archetypes : [player.archetype || 'Mágico']).map((arch) => (
+                    <span
+                      key={arch}
+                      className={cn('px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider border flex items-center gap-1', getArchetypeBadgeClass(arch))}
+                    >
+                      <Award className="w-3 h-3" />
+                      {arch}
+                    </span>
+                  ))}
                 </div>
                 <h1 className="text-2xl font-bold text-zinc-100 mt-1">{player.name}</h1>
               </div>

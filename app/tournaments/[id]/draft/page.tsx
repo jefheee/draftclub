@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { TournamentPlayerStats } from '@/types/database';
 import { BackButton } from '@/components/ui/back-button';
-import { TIER_MAP, getPositionBadgeClass, cn } from '@/lib/utils';
+import { TIER_MAP, getPositionBadgeClass, getArchetypeBadgeClass, cn } from '@/lib/utils';
 import { Search, Crown, ArrowUpDown, Award, AlertTriangle, Shield, Check } from 'lucide-react';
 
 type SortField = 'overall' | 'mechanic' | 'iq' | 'teamplay' | 'votes' | 'name';
@@ -310,9 +310,13 @@ export default function TournamentDraftPage() {
                               </span>
                             )}
                           </div>
-                          <span className="text-[10px] text-zinc-500 flex items-center gap-1 mt-0.5">
-                            <Award className="w-2.5 h-2.5 text-zinc-600" /> {player.archetype}
-                          </span>
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {(player.archetypes && player.archetypes.length > 0 ? player.archetypes : [player.archetype || 'Mágico']).map((arch) => (
+                              <span key={arch} className={cn('text-[9px] font-medium px-1.5 py-0.2 rounded border', getArchetypeBadgeClass(arch))}>
+                                {arch}
+                              </span>
+                            ))}
+                          </div>
                         </div>
                       </td>
 

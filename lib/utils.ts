@@ -102,6 +102,39 @@ export function getPositionBadgeClass(position: string): string {
   return 'bg-zinc-900 text-zinc-400 border-zinc-800';
 }
 
+/**
+ * Lista Oficial de Arquétipos do EA FC 26
+ */
+export const EA_FC_26_ARCHETYPES = {
+  attackers: ['Mágico', 'Finalizador', 'Alvo'],
+  midfielders: ['Maestro', 'Criador', 'Reciclador', 'Faísca', 'Comandante'],
+  defenders: ['Chefia', 'Destruidor', 'Progressor', 'Ala Ofensivo'],
+  goalkeepers: ['Muralha'],
+} as const;
+
+export const ALL_ARCHETYPES: string[] = [
+  'Mágico', 'Finalizador', 'Alvo',
+  'Maestro', 'Criador', 'Reciclador', 'Faísca', 'Comandante',
+  'Chefia', 'Destruidor', 'Progressor', 'Ala Ofensivo',
+  'Muralha'
+];
+
+export function getArchetypeBadgeClass(archetype: string): string {
+  if (EA_FC_26_ARCHETYPES.attackers.includes(archetype as any)) {
+    return 'bg-rose-950/40 text-rose-300 border-rose-800/40';
+  }
+  if (EA_FC_26_ARCHETYPES.midfielders.includes(archetype as any)) {
+    return 'bg-amber-950/40 text-amber-300 border-amber-800/40';
+  }
+  if (EA_FC_26_ARCHETYPES.defenders.includes(archetype as any)) {
+    return 'bg-emerald-950/40 text-emerald-300 border-emerald-800/40';
+  }
+  if (EA_FC_26_ARCHETYPES.goalkeepers.includes(archetype as any)) {
+    return 'bg-purple-950/40 text-purple-300 border-purple-800/40';
+  }
+  return 'bg-zinc-900 text-zinc-300 border-zinc-800';
+}
+
 // Helpers de slots táticos padronizados 11v11 (y: 90 = GK, 75 = Linha defensiva, 55 = Volantes, 38 = Meias, 16 = Atacantes)
 const GK_SLOT: PitchPositionSlot = { slotId: 'gk', positionCode: 'GK', displayName: 'Goleiro', xPercent: 50, yPercent: 90 };
 

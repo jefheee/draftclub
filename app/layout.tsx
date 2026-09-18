@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { Header } from '@/components/layout/header';
+import { AuthProvider } from '@/components/auth/auth-context';
 
 export const metadata: Metadata = {
   title: 'DraftClub • EA FC Pro Clubs Platform',
@@ -15,10 +16,12 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className="dark">
       <body className="bg-zinc-950 text-zinc-50 antialiased min-h-screen flex flex-col">
-        <Header />
-        <div className="flex-1">
-          {children}
-        </div>
+        <AuthProvider>
+          <Header />
+          <div className="flex-1">
+            {children}
+          </div>
+        </AuthProvider>
       </body>
     </html>
   );

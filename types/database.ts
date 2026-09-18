@@ -2,11 +2,19 @@ export type Tier = 'S' | 'A' | 'B' | 'C' | 'D' | 'UNRATED';
 export type TournamentStatus = 'REGISTRATION' | 'SCOUTING' | 'DRAFT' | 'ACTIVE' | 'FINISHED';
 export type ParticipantRole = 'admin' | 'captain' | 'player';
 
+export interface TournamentRules {
+  crossplay_gen: 'current_gen' | 'old_gen';
+  min_human_players: number;
+  any_allowed: boolean;
+  gk_required: boolean;
+}
+
 export interface Tournament {
   id: string;
   name: string;
   format: string;
   status: TournamentStatus;
+  rules?: TournamentRules;
   created_at: string;
 }
 
@@ -15,7 +23,8 @@ export interface PlayerProfile {
   user_id?: string;
   name: string;
   positions_declared: string[];
-  archetype: string;
+  archetype?: string;
+  archetypes?: string[];
   avatar_url?: string;
   created_at: string;
 }
@@ -110,11 +119,61 @@ export interface SquadLineup {
   updated_at: string;
 }
 
+export interface MatchPlayerStat {
+  id: string;
+  match_id: string;
+  player_id: string;
+  team_id: string;
+  goals: number;
+  assists: number;
+  red_cards: number;
+  yellow_cards: number;
+  rating: number;
+  player?: PlayerProfile;
+}
+
+export interface Match {
+  id: string;
+  tournament_id: string;
+  home_team_id: string;
+  away_team_id: string;
+  home_score: number;
+  away_score: number;
+  proof_image_url?: string | null;
+  status: 'pending' | 'approved' | 'rejected';
+  reported_by?: string | null;
+  notes?: string | null;
+  created_at: string;
+  reviewed_at?: string | null;
+  reviewed_by?: string | null;
+  home_team?: Team;
+  away_team?: Team;
+  player_stats?: MatchPlayerStat[];
+}
+
+export interface TournamentStanding {
+  team_id: string;
+  tournament_id: string;
+  team_name: string;
+  logo_url?: string | null;
+  captain_id?: string | null;
+  played: number;
+  won: number;
+  drawn: number;
+  lost: number;
+  goals_for: number;
+  goals_against: number;
+  goal_difference: number;
+  points: number;
+  position: number;
+}
+
 export interface TournamentPlayerStats {
   tournament_id: string;
   player_id: string;
   name: string;
   archetype: string;
+  archetypes?: string[];
   positions_declared: string[];
   community_position: string;
   community_confidence: number;
