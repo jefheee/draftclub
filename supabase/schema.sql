@@ -332,7 +332,92 @@ CREATE POLICY "Public Read draft_picks" ON draft_picks FOR SELECT TO public USIN
 CREATE POLICY "Public Manage draft_picks" ON draft_picks FOR ALL TO public USING (true);
 CREATE POLICY "Public Read squad_lineups" ON squad_lineups FOR SELECT TO public USING (true);
 CREATE POLICY "Public Manage squad_lineups" ON squad_lineups FOR ALL TO public USING (true);
-CREATE POLICY "Public Read matches" ON matches FOR SELECT TO public USING (true);
-CREATE POLICY "Public Manage matches" ON matches FOR ALL TO public USING (true);
-CREATE POLICY "Public Read match_player_stats" ON match_player_stats FOR SELECT TO public USING (true);
-CREATE POLICY "Public Manage match_player_stats" ON match_player_stats FOR ALL TO public USING (true);
+-- 12. FASES DO CAMPEONATO (ESTILO COPAFÁCIL: GRUPOS, OITAVAS, QUARTAS, SEMI, FINAL)
+CREATE TABLE IF NOT EXISTS tournament_phases (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tournament_id UUID NOT NULL REFERENCES tournaments(id) ON DELETE CASCADE,
+    name TEXT NOT NULL,
+    phase_type TEXT NOT NULL DEFAULT 'groups' CHECK (phase_type IN ('groups', 'knockout')),
+    order_num INTEGER NOT NULL DEFAULT 1,
+    status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('pending', 'active', 'finished')),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- 13. EVENTOS DETALHADOS DA PARTIDA (GOLS, ASSISTÊNCIAS, CARTÕES, CLEAN SHEETS)
+CREATE TABLE IF NOT EXISTS match_events (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    match_id UUID NOT NULL REFERENCES matches(id) ON DELETE CASCADE,
+    player_id UUID NOT NULL REFERENCES player_profiles(id) ON DELETE CASCADE,
+    team_id UUID NOT NULL REFERENCES teams(id) ON DELETE CASCADE,
+    type TEXT NOT NULL CHECK (type IN ('goal', 'assist', 'yellow_card', 'red_card', 'clean_sheet')),
+    minute INTEGER,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- 14. MERCADÃO DE JOGADORES LIVRES (FREE AGENTS BUSCANDO TIME)
+CREATE TABLE IF NOT EXISTS free_agents (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    player_id UUID NOT NULL UNIQUE REFERENCES player_profiles(id) ON DELETE CASCADE,
+    platform TEXT NOT NULL DEFAULT 'PS5' CHECK (platform IN ('PS5', 'Xbox Series', 'PC', 'OldGen')),
+    primary_position TEXT NOT NULL,
+    secondary_positions TEXT[] DEFAULT '{}',
+    description TEXT,
+    contact_discord TEXT,
+    contact_whatsapp TEXT,
+    is_active BOOLEAN NOT NULL DEFAULT true,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- VIEWS ANALÍTICAS DE E-SPORTS (ARTILHARIA E ASSISTÊNCIAS)
+CREATE OR REPLACE VIEW vw_top_scorers AS
+SELECT 
+    p.id AS player_id,
+    p.name AS player_name,
+    t.id AS team_id,
+    t.name AS team_name,
+    t.logo_url AS team_logo_url,
+    m.tournament_id,
+    COUNT(me.id)::INT AS goals_count,
+    COUNT(DISTINCT me.match_id)::INT AS matches_played,
+    ROUND(COUNT(me.id)::NUMERIC / NULLIF(COUNT(DISTINCT me.match_id), 0), 2) AS goals_per_match,
+    ROW_NUMBER() OVER (PARTITION BY m.tournament_id ORDER BY COUNT(me.id) DESC, COUNT(DISTINCT me.match_id) ASC)::INT AS rank
+FROM match_events me
+JOIN matches m ON me.match_id = m.id
+JOIN player_profiles p ON me.player_id = p.id
+JOIN teams t ON me.team_id = t.id
+WHERE me.type = 'goal' AND m.status = 'approved'
+GROUP BY p.id, p.name, t.id, t.name, t.logo_url, m.tournament_id;
+
+ALTER VIEW vw_top_scorers SET (security_invoker = on);
+
+CREATE OR REPLACE VIEW vw_top_assists AS
+SELECT 
+    p.id AS player_id,
+    p.name AS player_name,
+    t.id AS team_id,
+    t.name AS team_name,
+    t.logo_url AS team_logo_url,
+    m.tournament_id,
+    COUNT(me.id)::INT AS assists_count,
+    COUNT(DISTINCT me.match_id)::INT AS matches_played,
+    ROW_NUMBER() OVER (PARTITION BY m.tournament_id ORDER BY COUNT(me.id) DESC, COUNT(DISTINCT me.match_id) ASC)::INT AS rank
+FROM match_events me
+JOIN matches m ON me.match_id = m.id
+JOIN player_profiles p ON me.player_id = p.id
+JOIN teams t ON me.team_id = t.id
+WHERE me.type = 'assist' AND m.status = 'approved'
+GROUP BY p.id, p.name, t.id, t.name, t.logo_url, m.tournament_id;
+
+ALTER VIEW vw_top_assists SET (security_invoker = on);
+
+-- RLS & POLICIES ADICIONAIS
+ALTER TABLE tournament_phases ENABLE ROW LEVEL SECURITY;
+ALTER TABLE match_events ENABLE ROW LEVEL SECURITY;
+ALTER TABLE free_agents ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Public Read tournament_phases" ON tournament_phases FOR SELECT TO public USING (true);
+CREATE POLICY "Public Manage tournament_phases" ON tournament_phases FOR ALL TO public USING (true);
+CREATE POLICY "Public Read match_events" ON match_events FOR SELECT TO public USING (true);
+CREATE POLICY "Public Manage match_events" ON match_events FOR ALL TO public USING (true);
+CREATE POLICY "Public Read free_agents" ON free_agents FOR SELECT TO public USING (true);
+CREATE POLICY "Public Manage free_agents" ON free_agents FOR ALL TO public USING (true);

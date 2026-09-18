@@ -9,41 +9,35 @@ export function Pitch() {
   const { slots, assignments, selectedBenchPlayer, assignPlayerToSlot, removePlayerFromSlot } = useSquad();
 
   return (
-    <div className="relative w-full aspect-[3/4] max-w-[560px] mx-auto bg-[#08190d] rounded-2xl p-4 sm:p-6 shadow-xl border border-zinc-800 select-none overflow-hidden">
-      {/* Subtle Matte Turf Texture */}
-      <div className="absolute inset-0 bg-[radial-gradient(#0c2313_1px,transparent_1px)] [background-size:16px_16px] opacity-40 pointer-events-none" />
-
-      {/* Field Vignette */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_50%,rgba(0,0,0,0.5)_100%)] pointer-events-none" />
-
-      {/* Linhas Táticas Minimalistas (Branco Fosco com Opacidade Suave) */}
-      <div className="relative w-full h-full border border-white/20 rounded-xl pointer-events-none flex flex-col justify-between">
+    <div className="relative w-full aspect-[3/4] max-w-[560px] mx-auto bg-[#0b1d12] rounded-xl p-4 sm:p-6 border border-slate-800 select-none overflow-hidden">
+      {/* Linhas Táticas Minimalistas em Branco Sólido Fosco */}
+      <div className="relative w-full h-full border border-white/25 rounded-lg pointer-events-none flex flex-col justify-between">
         {/* Grande e Pequena Área Superior */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-[16%] border-b border-x border-white/20 rounded-b-sm">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-1/2 border-b border-x border-white/20" />
-          <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-white/30" />
-          <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 w-10 h-5 border-b border-white/20 rounded-b-full" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-[16%] border-b border-x border-white/25 rounded-b-sm">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-1/2 border-b border-x border-white/25" />
+          <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-white/40" />
+          <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 w-10 h-5 border-b border-white/25 rounded-b-full" />
         </div>
 
         {/* Linha Central e Círculo do Meio de Campo */}
-        <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-white/20 -translate-y-1/2 flex items-center justify-center">
-          <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full border border-white/20 flex items-center justify-center">
-            <div className="w-1.5 h-1.5 rounded-full bg-white/30" />
+        <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-white/25 -translate-y-1/2 flex items-center justify-center">
+          <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full border border-white/25 flex items-center justify-center">
+            <div className="w-1.5 h-1.5 rounded-full bg-white/40" />
           </div>
         </div>
 
         {/* Grande e Pequena Área Inferior */}
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-[16%] border-t border-x border-white/20 rounded-t-sm">
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-1/2 border-t border-x border-white/20" />
-          <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-white/30" />
-          <div className="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-5 border-t border-white/20 rounded-t-full" />
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-[16%] border-t border-x border-white/25 rounded-t-sm">
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-1/2 border-t border-x border-white/25" />
+          <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-white/40" />
+          <div className="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-5 border-t border-white/25 rounded-t-full" />
         </div>
 
         {/* Cantos */}
-        <div className="absolute top-0 left-0 w-3 h-3 border-b border-r border-white/20 rounded-br-full" />
-        <div className="absolute top-0 right-0 w-3 h-3 border-b border-l border-white/20 rounded-bl-full" />
-        <div className="absolute bottom-0 left-0 w-3 h-3 border-t border-r border-white/20 rounded-tr-full" />
-        <div className="absolute bottom-0 right-0 w-3 h-3 border-t border-l border-white/20 rounded-tl-full" />
+        <div className="absolute top-0 left-0 w-3 h-3 border-b border-r border-white/25 rounded-br-full" />
+        <div className="absolute top-0 right-0 w-3 h-3 border-b border-l border-white/25 rounded-bl-full" />
+        <div className="absolute bottom-0 left-0 w-3 h-3 border-t border-r border-white/25 rounded-tr-full" />
+        <div className="absolute bottom-0 right-0 w-3 h-3 border-t border-l border-white/25 rounded-tl-full" />
       </div>
 
       {/* Slots dos 11 Atletas */}
@@ -63,7 +57,7 @@ export function Pitch() {
               }}
               onClick={() => selectedBenchPlayer && assignPlayerToSlot(slot.slotId, selectedBenchPlayer)}
               className={cn(
-                'absolute flex flex-col items-center group cursor-pointer transition-all duration-150',
+                'absolute flex flex-col items-center group cursor-pointer transition-transform duration-150',
                 isSlotActive && !assigned && 'scale-105'
               )}
             >
@@ -72,14 +66,14 @@ export function Pitch() {
                 <div className="relative flex flex-col items-center">
                   <div
                     className={cn(
-                      'w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex flex-col items-center justify-center border bg-zinc-950/90 shadow-lg backdrop-blur-sm transition-transform group-hover:scale-105',
-                      statColor?.border || 'border-zinc-700'
+                      'w-10 h-10 sm:w-11 sm:h-11 rounded-md flex flex-col items-center justify-center border bg-slate-950 border-slate-800 transition-transform group-hover:scale-105',
+                      statColor?.border || 'border-slate-800'
                     )}
                   >
                     <span className={cn('text-xs font-bold font-mono leading-none', statColor?.text)}>
                       {assigned.overall_score > 0 ? assigned.overall_score : '75'}
                     </span>
-                    <span className="text-[8px] font-semibold text-zinc-400 uppercase tracking-tight mt-0.5">
+                    <span className="text-[8px] font-semibold text-slate-400 uppercase tracking-tight mt-0.5">
                       {slot.positionCode}
                     </span>
 
@@ -89,14 +83,14 @@ export function Pitch() {
                         e.stopPropagation();
                         removePlayerFromSlot(slot.slotId);
                       }}
-                      className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-zinc-800 hover:bg-rose-900 border border-zinc-700 text-zinc-300 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-slate-900 hover:bg-rose-950 border border-slate-700 text-slate-300 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                     >
                       <X className="w-2 h-2" />
                     </button>
                   </div>
 
                   {/* Nome do Atleta */}
-                  <div className="mt-1 px-1.5 py-0.5 rounded bg-zinc-950/90 border border-zinc-800 text-[9px] font-medium text-zinc-200 whitespace-nowrap shadow max-w-[75px] sm:max-w-[85px] truncate">
+                  <div className="mt-1 px-1.5 py-0.5 rounded bg-slate-950/90 border border-slate-800 text-[9px] font-medium text-slate-200 whitespace-nowrap max-w-[75px] sm:max-w-[85px] truncate">
                     {assigned.name}
                   </div>
                 </div>
@@ -107,15 +101,15 @@ export function Pitch() {
                     className={cn(
                       'w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-dashed flex items-center justify-center transition-all',
                       isSlotActive
-                        ? 'border-emerald-500/70 bg-emerald-950/30 text-emerald-300'
-                        : 'border-white/20 bg-black/40 text-zinc-400 hover:border-zinc-500 hover:text-zinc-200'
+                        ? 'border-cyan-400 bg-cyan-950/60 text-cyan-300'
+                        : 'border-white/20 bg-slate-950/60 text-slate-400 hover:border-slate-500 hover:text-slate-200'
                     )}
                   >
                     <span className="text-[9px] sm:text-[10px] font-bold tracking-wider">
                       {slot.positionCode}
                     </span>
                   </div>
-                  <span className="text-[8px] text-zinc-400 bg-zinc-950/80 px-1 py-0.5 rounded mt-0.5 whitespace-nowrap border border-zinc-900">
+                  <span className="text-[8px] text-slate-400 bg-slate-950/80 px-1 py-0.5 rounded mt-0.5 whitespace-nowrap border border-slate-800">
                     {slot.displayName}
                   </span>
                 </div>

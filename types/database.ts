@@ -26,6 +26,13 @@ export interface PlayerProfile {
   archetype?: string;
   archetypes?: string[];
   avatar_url?: string;
+  platform?: 'PS5' | 'Xbox Series' | 'PC' | 'OldGen';
+  primary_position?: string;
+  secondary_positions?: string[];
+  contact_discord?: string;
+  contact_whatsapp?: string;
+  is_looking_for_team?: boolean;
+  bio?: string;
   created_at: string;
 }
 
@@ -132,9 +139,71 @@ export interface MatchPlayerStat {
   player?: PlayerProfile;
 }
 
+export interface TournamentPhase {
+  id: string;
+  tournament_id: string;
+  name: string;
+  phase_type: 'groups' | 'knockout';
+  order_num: number;
+  status: 'pending' | 'active' | 'finished';
+  created_at: string;
+}
+
+export interface MatchEvent {
+  id: string;
+  match_id: string;
+  player_id: string;
+  team_id: string;
+  type: 'goal' | 'assist' | 'yellow_card' | 'red_card' | 'clean_sheet';
+  minute?: number | null;
+  created_at: string;
+  player?: PlayerProfile;
+  team?: Team;
+}
+
+export interface FreeAgent {
+  id: string;
+  player_id: string;
+  platform: 'PS5' | 'Xbox Series' | 'PC' | 'OldGen';
+  primary_position: string;
+  secondary_positions: string[];
+  description?: string | null;
+  contact_discord?: string | null;
+  contact_whatsapp?: string | null;
+  is_active: boolean;
+  created_at: string;
+  player?: PlayerProfile;
+}
+
+export interface TopScorer {
+  player_id: string;
+  player_name: string;
+  team_id: string;
+  team_name: string;
+  team_logo_url?: string | null;
+  tournament_id: string;
+  goals_count: number;
+  matches_played: number;
+  goals_per_match: number;
+  rank: number;
+}
+
+export interface TopAssist {
+  player_id: string;
+  player_name: string;
+  team_id: string;
+  team_name: string;
+  team_logo_url?: string | null;
+  tournament_id: string;
+  assists_count: number;
+  matches_played: number;
+  rank: number;
+}
+
 export interface Match {
   id: string;
   tournament_id: string;
+  phase_id?: string | null;
   home_team_id: string;
   away_team_id: string;
   home_score: number;
@@ -148,7 +217,9 @@ export interface Match {
   reviewed_by?: string | null;
   home_team?: Team;
   away_team?: Team;
+  phase?: TournamentPhase;
   player_stats?: MatchPlayerStat[];
+  events?: MatchEvent[];
 }
 
 export interface TournamentStanding {

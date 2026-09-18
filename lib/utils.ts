@@ -109,14 +109,14 @@ export const EA_FC_26_ARCHETYPES = {
   attackers: ['Mágico', 'Finalizador', 'Alvo'],
   midfielders: ['Maestro', 'Criador', 'Reciclador', 'Faísca', 'Comandante'],
   defenders: ['Chefia', 'Destruidor', 'Progressor', 'Ala Ofensivo'],
-  goalkeepers: ['Muralha'],
+  goalkeepers: ['Muralha', 'GL-Linha'],
 } as const;
 
 export const ALL_ARCHETYPES: string[] = [
   'Mágico', 'Finalizador', 'Alvo',
   'Maestro', 'Criador', 'Reciclador', 'Faísca', 'Comandante',
   'Chefia', 'Destruidor', 'Progressor', 'Ala Ofensivo',
-  'Muralha'
+  'Muralha', 'GL-Linha'
 ];
 
 export function getArchetypeBadgeClass(archetype: string): string {
