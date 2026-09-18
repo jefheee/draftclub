@@ -4,25 +4,25 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/components/auth/auth-context';
 import { BackButton } from '@/components/ui/back-button';
-import { 
-  User, 
-  Shield, 
-  Gamepad2, 
-  Sparkles, 
-  CheckCircle2, 
-  AlertCircle, 
-  Save, 
-  MessageSquare, 
-  Phone, 
+import {
+  User,
+  Shield,
+  Gamepad2,
+  Sparkles,
+  CheckCircle2,
+  AlertCircle,
+  Save,
+  MessageSquare,
+  Phone,
   ExternalLink,
   Users
 } from 'lucide-react';
-import { 
-  ALL_ARCHETYPES, 
-  EA_FC_26_ARCHETYPES, 
-  getArchetypeBadgeClass, 
-  getPositionBadgeClass, 
-  cn 
+import {
+  ALL_ARCHETYPES,
+  EA_FC_26_ARCHETYPES,
+  getArchetypeBadgeClass,
+  getPositionBadgeClass,
+  cn
 } from '@/lib/utils';
 import Link from 'next/link';
 
@@ -189,7 +189,7 @@ export default function PlayerRegistrationPage() {
             Passaporte do Atleta <span className="text-cyan-400">EA FC 26</span>
           </h1>
           <p className="text-xs text-slate-400 max-w-lg mx-auto">
-            Cadastre seu perfil de Pro Clubs, combine múltiplos arquétipos oficiais (incluindo GL-Linha) e anuncie sua disponibilidade no Mercadão para os capitães de equipe.
+            Cadastre seu perfil de Pro Clubs, combine múltiplos arquétipos oficiais e anuncie sua disponibilidade no Mercadão para os capitães de equipe.
           </p>
         </div>
 
